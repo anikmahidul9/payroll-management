@@ -12,14 +12,11 @@ import HRDashboard from './pages/hr/HRDashboard';
 import EmployeeDashboard from './pages/employee/EmployeeDashboard';
 import AttendancePage from './pages/admin/AttendancePage'; // New Import
 import DeductionsPage from './pages/admin/DeductionsPage'; // New Import
+import EmployeesPage from './pages/admin/EmployeesPage'; // New Import
+
+import EmployeeProfilePage from './pages/admin/EmployeeProfilePage'; // New Import
 
 // Placeholder components for other admin sections
-const EmployeesPage = () => (
-  <div className="p-6">
-    <h1 className="text-2xl font-bold text-gray-800">Employees Management</h1>
-    <p className="mt-4 text-gray-600">This page will display employee details.</p>
-  </div>
-);
 const ReportsPage = () => (
   <div className="p-6">
     <h1 className="text-2xl font-bold text-gray-800">Reports Overview</h1>
@@ -53,6 +50,14 @@ function App() {
           element={
             <Layout>
               <EmployeesPage />
+            </Layout>
+          }
+        />
+        <Route
+          path="/admin/employees/:employeeId"
+          element={
+            <Layout>
+              <EmployeeProfilePage />
             </Layout>
           }
         />
