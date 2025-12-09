@@ -5,13 +5,16 @@ import {
   FaUsers,
   FaFileInvoiceDollar,
   FaChartBar,
-  FaCog, // Added for Settings
+  FaCog,
+  FaCalendarCheck, // Added for Attendance
+  FaMinusCircle,    // Added for Deductions
+  FaSignOutAlt,   // Added for Logout
 } from 'react-icons/fa';
 import logo from '../../assets/logo.png'; // Import the logo
 
 const Sidebar = () => {
   return (
-    <div className="flex h-screen flex-col justify-between border-e bg-white w-64 shadow-md">
+    <div className="flex h-screen flex-col justify-between bg-white w-64 shadow-md">
       <div className="px-4 py-6">
         {/* Logo Section */}
         <div className="flex items-center justify-center mb-8">
@@ -55,6 +58,32 @@ const Sidebar = () => {
             <span className="text-sm"> Payroll </span>
           </NavLink>
 
+          {/* New Attendance Link */}
+          <NavLink
+            to="/admin/attendance"
+            className={({ isActive }) =>
+              `flex items-center gap-3 rounded-lg px-4 py-2 text-gray-700 transition-colors duration-200 hover:bg-gray-100 hover:text-indigo-600 ${
+                isActive ? 'bg-indigo-50 text-indigo-600 font-semibold' : ''
+              }`
+            }
+          >
+            <FaCalendarCheck className="h-5 w-5" />
+            <span className="text-sm"> Attendance </span>
+          </NavLink>
+
+          {/* New Deductions Link */}
+          <NavLink
+            to="/admin/deductions"
+            className={({ isActive }) =>
+              `flex items-center gap-3 rounded-lg px-4 py-2 text-gray-700 transition-colors duration-200 hover:bg-gray-100 hover:text-indigo-600 ${
+                isActive ? 'bg-indigo-50 text-indigo-600 font-semibold' : ''
+              }`
+            }
+          >
+            <FaMinusCircle className="h-5 w-5" />
+            <span className="text-sm"> Deductions </span>
+          </NavLink>
+
           <NavLink
             to="/admin/reports"
             className={({ isActive }) =>
@@ -83,25 +112,16 @@ const Sidebar = () => {
       </div>
 
       <div className="sticky inset-x-0 bottom-0 border-t border-gray-100">
-        <a
-          href="#"
+        {/* Logout Link */}
+        <NavLink
+          to="/logout" // Assuming a logout route
           className="flex items-center gap-4 bg-white p-4 hover:bg-gray-50 transition-colors duration-200"
         >
-          <img
-            alt="User Avatar"
-            src="https://images.unsplash.com/photo-1600486913747-55e5470d6f40?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
-            className="size-10 rounded-full object-cover border-2 border-indigo-200"
-          />
-          <div>
-            <p className="text-sm">
-              <strong className="block font-medium text-gray-900">Eric Frusciante</strong>
-              <span className="text-gray-600">eric@frusciante.com</span>
-            </p>
-          </div>
-        </a>
+          <FaSignOutAlt className="h-5 w-5 text-gray-700" />
+          <span className="text-sm font-medium text-gray-900"> Logout </span>
+        </NavLink>
       </div>
     </div>
   );
-};
-
+}
 export default Sidebar;
