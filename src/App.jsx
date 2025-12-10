@@ -15,6 +15,7 @@ import DeductionsPage from './pages/admin/DeductionsPage'; // New Import
 import EmployeesPage from './pages/admin/EmployeesPage'; // New Import
 
 import EmployeeProfilePage from './pages/admin/EmployeeProfilePage'; // New Import
+import PayrollPage from './pages/admin/PayrollPage';
 
 // Placeholder components for other admin sections
 const ReportsPage = () => (
@@ -66,6 +67,14 @@ function App() {
           element={
             <Layout>
               <AttendancePage />
+            </Layout>
+          }
+        />
+        <Route
+          path="/admin/payroll"
+          element={
+            <Layout>
+              <PayrollPage />
             </Layout>
           }
         />
