@@ -17,13 +17,7 @@ import EmployeesPage from './pages/admin/EmployeesPage'; // New Import
 import EmployeeProfilePage from './pages/admin/EmployeeProfilePage'; // New Import
 import PayrollPage from './pages/admin/PayrollPage';
 
-// Placeholder components for other admin sections
-const ReportsPage = () => (
-  <div className="p-6">
-    <h1 className="text-2xl font-bold text-gray-800">Reports Overview</h1>
-    <p className="mt-4 text-gray-600">This page will display various reports.</p>
-  </div>
-);
+import ReportsPage from './pages/admin/ReportsPage';
 const SettingsPage = () => (
   <div className="p-6">
     <h1 className="text-2xl font-bold text-gray-800">Admin Settings</h1>
