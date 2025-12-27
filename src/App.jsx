@@ -10,26 +10,37 @@ import Layout from './components/admin/Layout';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import HRDashboard from './pages/hr/HRDashboard';
 import EmployeeDashboard from './pages/employee/EmployeeDashboard';
-import AttendancePage from './pages/admin/AttendancePage'; // New Import
-import DeductionsPage from './pages/admin/DeductionsPage'; // New Import
-import EmployeesPage from './pages/admin/EmployeesPage'; // New Import
-
-import EmployeeProfilePage from './pages/admin/EmployeeProfilePage'; // New Import
+import AttendancePage from './pages/admin/AttendancePage';
+import DeductionsPage from './pages/admin/DeductionsPage';
+import EmployeesPage from './pages/admin/EmployeesPage';
+import AdminEmployeeProfilePage from './pages/admin/EmployeeProfilePage';
 import PayrollPage from './pages/admin/PayrollPage';
-
 import ReportsPage from './pages/admin/ReportsPage';
-const SettingsPage = () => (
-  <div className="p-6">
-    <h1 className="text-2xl font-bold text-gray-800">Admin Settings</h1>
-    <p className="mt-4 text-gray-600">This page will manage application settings.</p>
-  </div>
-);
 
+import HRLayout from './components/hr/Layout';
+import HRAttendancePage from './pages/hr/AttendancePage';
+import HRDeductionsPage from './pages/hr/DeductionsPage';
+import HREmployeesPage from './pages/hr/EmployeesPage';
+import HREmployeeProfilePage from './pages/hr/EmployeeProfilePage';
+import HRPayrollPage from './pages/hr/PayrollPage';
+import HRReportsPage from './pages/hr/ReportsPage';
+
+import EmployeeLayout from './components/employee/Layout';
+import EmpProfilePage from './pages/employee/ProfilePage';
+import EmployeePayslipPage from './pages/employee/PayslipPage';
+import EmployeeAttendancePage from './pages/employee/AttendancePage';
+import EmployeeLeavePage from './pages/employee/LeavePage';
+
+import SettingsPage from './pages/admin/SettingsPage';
+
+
+import NotFoundPage from './pages/NotFoundPage';
 
 function App() {
   return (
     <Router>
       <Routes>
+        <Route path="/" element={<Navigate to="/login" />} />
         <Route path="/login" element={<Login />} />
         <Route
           path="/admin/dashboard"
@@ -39,7 +50,6 @@ function App() {
             </Layout>
           }
         />
-        {/* New Admin Routes */}
         <Route
           path="/admin/employees"
           element={
@@ -52,7 +62,7 @@ function App() {
           path="/admin/employees/:employeeId"
           element={
             <Layout>
-              <EmployeeProfilePage />
+              <AdminEmployeeProfilePage />
             </Layout>
           }
         />
@@ -99,22 +109,110 @@ function App() {
         <Route
           path="/hr/dashboard"
           element={
-            <Layout>
+            <HRLayout>
               <HRDashboard />
-            </Layout>
+            </HRLayout>
+          }
+        />
+        <Route
+          path="/hr/employees"
+          element={
+            <HRLayout>
+              <HREmployeesPage />
+            </HRLayout>
+          }
+        />
+        <Route
+          path="/hr/employees/:employeeId"
+          element={
+            <HRLayout>
+              <HREmployeeProfilePage />
+            </HRLayout>
+          }
+        />
+        <Route
+          path="/hr/attendance"
+          element={
+            <HRLayout>
+              <HRAttendancePage />
+            </HRLayout>
+          }
+        />
+        <Route
+          path="/hr/payroll"
+          element={
+            <HRLayout>
+              <HRPayrollPage />
+            </HRLayout>
+          }
+        />
+        <Route
+          path="/hr/deductions"
+          element={
+            <HRLayout>
+              <HRDeductionsPage />
+            </HRLayout>
+          }
+        />
+        <Route
+          path="/hr/reports"
+          element={
+            <HRLayout>
+              <HRReportsPage />
+            </HRLayout>
+          }
+        />
+        <Route
+          path="/hr/settings"
+          element={
+            <HRLayout>
+              <SettingsPage />
+            </HRLayout>
           }
         />
         <Route
           path="/employee/dashboard"
           element={
-            <Layout>
+            <EmployeeLayout>
               <EmployeeDashboard />
-            </Layout>
+            </EmployeeLayout>
+          }
+        />
+        <Route
+          path="/employee/profile"
+          element={
+            <EmployeeLayout>
+              <EmpProfilePage />
+            </EmployeeLayout>
+          }
+        />
+        <Route
+          path="/employee/payslip"
+          element={
+            <EmployeeLayout>
+              <EmployeePayslipPage />
+            </EmployeeLayout>
+          }
+        />
+        <Route
+          path="/employee/attendance"
+          element={
+            <EmployeeLayout>
+              <EmployeeAttendancePage />
+            </EmployeeLayout>
+          }
+        />
+        <Route
+          path="/employee/leave"
+          element={
+            <EmployeeLayout>
+              <EmployeeLeavePage />
+            </EmployeeLayout>
           }
         />
         {/* Logout Route */}
         <Route path="/logout" element={<Navigate to="/login" />} />
-        <Route path="*" element={<Navigate to="/login" />} />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </Router>
   );
