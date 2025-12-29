@@ -11,6 +11,7 @@ import {
   FaMinusCircle,
   FaSignOutAlt,
   FaTimes,
+  FaCalendarAlt, // Added FaCalendarAlt for Leave Requests
 } from 'react-icons/fa';
 import logo from '../../assets/logo.png';
 
@@ -38,6 +39,10 @@ const SidebarContent = () => (
           <FaCalendarCheck className="h-5 w-5" />
           <span className="text-sm">Attendance</span>
         </NavLink>
+        <NavLink to="/hr/leave-requests" className={({ isActive }) => `flex items-center gap-3 rounded-lg px-4 py-2 text-gray-700 transition-colors duration-200 hover:bg-gray-100 hover:text-indigo-600 ${isActive ? 'bg-indigo-50 text-indigo-600 font-semibold' : ''}` }>
+          <FaCalendarAlt className="h-5 w-5" />
+          <span className="text-sm">Leave Requests</span>
+        </NavLink>
         <NavLink to="/hr/deductions" className={({ isActive }) => `flex items-center gap-3 rounded-lg px-4 py-2 text-gray-700 transition-colors duration-200 hover:bg-gray-100 hover:text-indigo-600 ${isActive ? 'bg-indigo-50 text-indigo-600 font-semibold' : ''}` }>
           <FaMinusCircle className="h-5 w-5" />
           <span className="text-sm">Deductions</span>
@@ -54,7 +59,7 @@ const SidebarContent = () => (
     </div>
     <div className="sticky inset-x-0 bottom-0 border-t border-gray-100">
       <NavLink to="/logout" className="flex items-center gap-4 bg-white p-4 hover:bg-gray-50 transition-colors duration-200">
-        <FaSignOutAlt className="h-5 w-5 text-gray-700" />
+        <FaSignOutAlt className="h-5 w-5" />
         <span className="text-sm font-medium text-gray-900">Logout</span>
       </NavLink>
     </div>
@@ -116,3 +121,4 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
 };
 
 export default Sidebar;
+

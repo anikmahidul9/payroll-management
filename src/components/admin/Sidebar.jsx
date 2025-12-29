@@ -4,6 +4,7 @@ import { Transition, Dialog } from '@headlessui/react';
 import {
   FaTachometerAlt,
   FaUsers,
+  FaBuilding,
   FaFileInvoiceDollar,
   FaChartBar,
   FaCog,
@@ -29,6 +30,10 @@ const SidebarContent = () => (
         <NavLink to="/admin/employees" className={({ isActive }) => `flex items-center gap-3 rounded-lg px-4 py-2 text-gray-700 transition-colors duration-200 hover:bg-gray-100 hover:text-indigo-600 ${isActive ? 'bg-indigo-50 text-indigo-600 font-semibold' : ''}` }>
           <FaUsers className="h-5 w-5" />
           <span className="text-sm">Employees</span>
+        </NavLink>
+        <NavLink to="/admin/departments" className={({ isActive }) => `flex items-center gap-3 rounded-lg px-4 py-2 text-gray-700 transition-colors duration-200 hover:bg-gray-100 hover:text-indigo-600 ${isActive ? 'bg-indigo-50 text-indigo-600 font-semibold' : ''}` }>
+          <FaBuilding className="h-5 w-5" />
+          <span className="text-sm">Departments</span>
         </NavLink>
         <NavLink to="/admin/payroll" className={({ isActive }) => `flex items-center gap-3 rounded-lg px-4 py-2 text-gray-700 transition-colors duration-200 hover:bg-gray-100 hover:text-indigo-600 ${isActive ? 'bg-indigo-50 text-indigo-600 font-semibold' : ''}` }>
           <FaFileInvoiceDollar className="h-5 w-5" />

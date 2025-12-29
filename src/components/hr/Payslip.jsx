@@ -1,6 +1,6 @@
 import React from "react";
 
-const Payslip = ({ employee, onClose }) => {
+const Payslip = ({ employee: payslip, onClose }) => {
   const handlePrint = () => {
     window.print();
   };
@@ -29,23 +29,36 @@ const Payslip = ({ employee, onClose }) => {
         </div>
         <div className="border-t border-gray-200 py-4">
           <h3 className="text-xl font-semibold text-gray-800 mb-4">
-            {employee.name}
+            {payslip.employeeName}
           </h3>
           <div className="grid grid-cols-2 gap-4">
             <div>
               <p className="text-gray-600">
-                <strong>Gross Salary:</strong> ${employee.salary}
+                <strong>Gross Salary:</strong> ${payslip.grossSalary}
               </p>
               <p className="text-gray-600">
-                <strong>Deductions:</strong> ${employee.deductions}
+                <strong>Total Deductions:</strong> ${payslip.deductions}
               </p>
             </div>
             <div>
               <p className="text-gray-600">
-                <strong>Net Salary:</strong> ${employee.salary - employee.deductions}
+                <strong>Net Salary:</strong> ${payslip.netSalary}
               </p>
             </div>
           </div>
+          {payslip.deductionDetails && payslip.deductionDetails.length > 0 && (
+            <div className="mt-4">
+              <h4 className="text-lg font-semibold text-gray-800">Deduction Details</h4>
+              <ul className="mt-2 border border-gray-200 rounded-md divide-y divide-gray-200">
+                {payslip.deductionDetails.map((ded, index) => (
+                  <li key={index} className="px-4 py-2 flex justify-between items-center">
+                    <span className="text-sm text-gray-600">{ded.name}</span>
+                    <span className="text-sm font-semibold text-red-600">-${ded.amount.toFixed(2)}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
         <div className="flex justify-end mt-6">
           <button

@@ -1,26 +1,40 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../firebase'; // Import auth from your firebase config
 import logo from '../assets/logo.png';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('admin'); // Default role
-
+  const [error, setError] = useState(''); // State for error messages
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    // Simulate login logic
-    console.log('Logging in with:', { email, password, role });
+    setError(''); // Clear previous errors
 
-    // Redirect based on role
-    if (role === 'admin') {
-      navigate('/admin/dashboard');
-    } else if (role === 'hr') {
-      navigate('/hr/dashboard');
-    } else if (role === 'employee') {
-      navigate('/employee/dashboard');
+    try {
+      // Sign in the user with Firebase Auth
+      await signInWithEmailAndPassword(auth, email, password);
+
+      // TODO: In a real app, you would get the user's role from Firebase Custom Claims
+      // after they log in, rather than trusting the role from the dropdown.
+      console.log('User logged in successfully!');
+
+      // Redirect based on the role selected in the dropdown
+      if (role === 'admin') {
+        navigate('/admin/dashboard');
+      } else if (role === 'hr') {
+        navigate('/hr/dashboard');
+      } else if (role === 'employee') {
+        navigate('/employee/dashboard');
+      }
+    } catch (err) {
+      // Handle Firebase authentication errors
+      setError(err.message);
+      console.error('Firebase login error:', err);
     }
   };
 
@@ -31,7 +45,7 @@ const Login = () => {
           <img src={logo} alt="Logo" className="w-20 h-20" />
         </div>
         <h2 className="text-2xl font-bold text-center text-gray-900">Login</h2>
-        <form className="space-y-6" onSubmit={handleSubmit}>
+        <form className="space-y-6" onSubmit={handleLogin}>
           <div>
             <label
               htmlFor="email"
@@ -96,6 +110,10 @@ const Login = () => {
               </select>
             </div>
           </div>
+
+          {error && (
+            <p className="text-sm text-center text-red-600">{error}</p>
+          )}
 
           <div>
             <button

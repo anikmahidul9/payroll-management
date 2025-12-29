@@ -13,9 +13,11 @@ import EmployeeDashboard from './pages/employee/EmployeeDashboard';
 import AttendancePage from './pages/admin/AttendancePage';
 import DeductionsPage from './pages/admin/DeductionsPage';
 import EmployeesPage from './pages/admin/EmployeesPage';
+import DepartmentsPage from './pages/admin/DepartmentsPage';
 import AdminEmployeeProfilePage from './pages/admin/EmployeeProfilePage';
 import PayrollPage from './pages/admin/PayrollPage';
 import ReportsPage from './pages/admin/ReportsPage';
+import PayslipViewPage from './pages/admin/PayslipViewPage';
 
 import HRLayout from './components/hr/Layout';
 import HRAttendancePage from './pages/hr/AttendancePage';
@@ -23,11 +25,14 @@ import HRDeductionsPage from './pages/hr/DeductionsPage';
 import HREmployeesPage from './pages/hr/EmployeesPage';
 import HREmployeeProfilePage from './pages/hr/EmployeeProfilePage';
 import HRPayrollPage from './pages/hr/PayrollPage';
+import HRPayslipViewPage from './pages/hr/PayslipViewPage';
 import HRReportsPage from './pages/hr/ReportsPage';
+import LeaveRequestsPage from './pages/hr/LeaveRequestsPage';
 
 import EmployeeLayout from './components/employee/Layout';
 import EmpProfilePage from './pages/employee/ProfilePage';
 import EmployeePayslipPage from './pages/employee/PayslipPage';
+import EmployeePayslipViewPage from './pages/employee/EmployeePayslipViewPage';
 import EmployeeAttendancePage from './pages/employee/AttendancePage';
 import EmployeeLeavePage from './pages/employee/LeavePage';
 
@@ -59,6 +64,14 @@ function App() {
           }
         />
         <Route
+          path="/admin/departments"
+          element={
+            <Layout>
+              <DepartmentsPage />
+            </Layout>
+          }
+        />
+        <Route
           path="/admin/employees/:employeeId"
           element={
             <Layout>
@@ -82,6 +95,7 @@ function App() {
             </Layout>
           }
         />
+        <Route path="/admin/payslip/:employeeId" element={<PayslipViewPage />} />
         <Route
           path="/admin/deductions"
           element={
@@ -146,11 +160,20 @@ function App() {
             </HRLayout>
           }
         />
+        <Route path="/hr/payslip/:payslipId" element={<HRPayslipViewPage />} />
         <Route
           path="/hr/deductions"
           element={
             <HRLayout>
               <HRDeductionsPage />
+            </HRLayout>
+          }
+        />
+        <Route
+          path="/hr/leave-requests"
+          element={
+            <HRLayout>
+              <LeaveRequestsPage />
             </HRLayout>
           }
         />
@@ -194,6 +217,7 @@ function App() {
             </EmployeeLayout>
           }
         />
+        <Route path="/employee/payslip/:payslipId" element={<EmployeePayslipViewPage />} />
         <Route
           path="/employee/attendance"
           element={

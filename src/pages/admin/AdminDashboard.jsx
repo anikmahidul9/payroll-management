@@ -1,13 +1,62 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaUsers, FaBuilding, FaPlaneDeparture, FaMoneyBillWave, FaCalendarAlt, FaClock } from 'react-icons/fa';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LineChart, Line } from 'recharts';
+import { collection, getDocs, query, where } from 'firebase/firestore';
+import { db } from '../../firebase';
 
 const AdminDashboard = () => {
+  const [employeeCount, setEmployeeCount] = useState(0);
+  const [departmentCount, setDepartmentCount] = useState(0);
+  const [pendingLeavesCount, setPendingLeavesCount] = useState(0);
+  const [totalSalaryPaid, setTotalSalaryPaid] = useState(0);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Fetch all collections in parallel
+        const employeesCollectionRef = collection(db, 'employees');
+        const departmentsCollectionRef = collection(db, 'departments');
+        const leaveRequestsCollectionRef = collection(db, 'leaveRequests');
+        const payslipsCollectionRef = collection(db, 'payslips');
+
+        const [
+          employeesSnapshot,
+          departmentsSnapshot,
+          leaveRequestsSnapshot,
+          payslipsSnapshot,
+        ] = await Promise.all([
+          getDocs(employeesCollectionRef),
+          getDocs(departmentsCollectionRef),
+          getDocs(query(leaveRequestsCollectionRef, where('status', '==', 'Pending'))),
+          getDocs(query(payslipsCollectionRef, where('paymentStatus', '==', 'Paid'))),
+        ]);
+
+        setEmployeeCount(employeesSnapshot.size);
+        setDepartmentCount(departmentsSnapshot.size);
+        setPendingLeavesCount(leaveRequestsSnapshot.size);
+
+        const totalSalary = payslipsSnapshot.docs.reduce(
+          (sum, doc) => sum + doc.data().netSalary,
+          0
+        );
+        setTotalSalaryPaid(totalSalary);
+
+      } catch (error) {
+        console.error("Error fetching dashboard data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   const cardData = [
-    { id: 1, title: 'Total Employees', value: '250', icon: <FaUsers className="text-4xl text-blue-500" /> },
-    { id: 2, title: 'Departments', value: '15', icon: <FaBuilding className="text-4xl text-green-500" /> },
-    { id: 3, title: 'Pending Leaves', value: '12', icon: <FaPlaneDeparture className="text-4xl text-yellow-500" /> },
-    { id: 4, title: 'Total Salary Paid', value: '500,000', icon: <FaMoneyBillWave className="text-4xl text-red-500" /> },
+    { id: 1, title: 'Total Employees', value: loading ? '...' : employeeCount, icon: <FaUsers className="text-4xl text-blue-500" /> },
+    { id: 2, title: 'Departments', value: loading ? '...' : departmentCount, icon: <FaBuilding className="text-4xl text-green-500" /> },
+    { id: 3, title: 'Pending Leaves', value: loading ? '...' : pendingLeavesCount, icon: <FaPlaneDeparture className="text-4xl text-yellow-500" /> },
+    { id: 4, title: 'Total Salary Paid', value: loading ? '...' : `${totalSalaryPaid.toLocaleString()}`, icon: <FaMoneyBillWave className="text-4xl text-red-500" /> },
   ];
 
   const payrollData = [

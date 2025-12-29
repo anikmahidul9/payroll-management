@@ -1,9 +1,53 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaBell, FaUserCircle, FaCog, FaSignOutAlt, FaBars } from 'react-icons/fa';
 import { Transition } from '@headlessui/react';
+import { auth, db } from '../../firebase';
+import { signOut } from 'firebase/auth';
+import { doc, onSnapshot } from 'firebase/firestore';
+import { useNavigate } from 'react-router-dom';
 
 const Navbar = ({ toggleSidebar }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [userProfile, setUserProfile] = useState(null);
+  const [loadingUser, setLoadingUser] = useState(true);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const unsubscribeAuth = auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        const userDocRef = doc(db, 'employees', user.uid);
+        const unsubscribeFirestore = onSnapshot(userDocRef, (docSnap) => {
+          if (docSnap.exists()) {
+            setUserProfile(docSnap.data());
+          } else {
+            setUserProfile(null);
+            console.warn('No employee profile found for logged-in user:', user.uid);
+          }
+          setLoadingUser(false);
+        }, (error) => {
+          console.error('Error fetching user profile:', error);
+          setUserProfile(null);
+          setLoadingUser(false);
+        });
+        return () => unsubscribeFirestore(); // Unsubscribe from Firestore listener
+      } else {
+        setUserProfile(null);
+        setLoadingUser(false);
+      }
+    });
+
+    return () => unsubscribeAuth(); // Unsubscribe from Auth listener
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      navigate('/login'); // Redirect to login page after logout
+    } catch (error) {
+      console.error('Error logging out:', error);
+      alert('Failed to log out. Please try again.');
+    }
+  };
 
   return (
     <header className="fixed top-0 left-0 right-0 z-30 bg-white/80 backdrop-blur-sm shadow-md lg:left-64">
@@ -44,14 +88,18 @@ const Navbar = ({ toggleSidebar }) => {
               aria-haspopup="true"
             >
               <span className="sr-only">Open user menu</span>
-              <img
-                className="h-9 w-9 rounded-full object-cover border-2 border-gray-200 group-hover:border-indigo-500"
-                src="https://images.unsplash.com/photo-1600486913747-55e5470d6f40?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
-                alt="User avatar"
-              />
+              {loadingUser ? (
+                <FaUserCircle className="h-9 w-9 text-gray-400" />
+              ) : (
+                <img
+                  className="h-9 w-9 rounded-full object-cover border-2 border-gray-200 group-hover:border-indigo-500"
+                  src={userProfile?.photo || 'https://images.unsplash.com/photo-1600486913747-55e5470d6f40?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80'}
+                  alt={userProfile?.name || 'User avatar'}
+                />
+              )}
               <div className="hidden md:block text-left">
-                <p className="text-sm font-medium text-gray-800">John Doe</p>
-                <p className="text-xs text-gray-500">Employee</p>
+                <p className="text-sm font-medium text-gray-800">{userProfile?.name || 'Guest'}</p>
+                <p className="text-xs text-gray-500">{userProfile?.role || 'Role'}</p>
               </div>
             </button>
 
@@ -72,12 +120,12 @@ const Navbar = ({ toggleSidebar }) => {
                 aria-labelledby="user-menu-button"
               >
                 <div className="border-b border-gray-200 px-4 py-3">
-                  <p className="text-sm font-semibold text-gray-800">John Doe</p>
-                  <p className="text-xs text-gray-500 truncate">john.doe@example.com</p>
+                  <p className="text-sm font-semibold text-gray-800">{userProfile?.name || 'Guest'}</p>
+                  <p className="text-xs text-gray-500 truncate">{userProfile?.email || 'N/A'}</p>
                 </div>
                 <div className="py-1">
                   <a
-                    href="#"
+                    href="#" // Consider changing this to a react-router-dom Link
                     className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                     role="menuitem"
                   >
@@ -85,7 +133,7 @@ const Navbar = ({ toggleSidebar }) => {
                     <span>Your Profile</span>
                   </a>
                   <a
-                    href="#"
+                    href="#" // Consider changing this to a react-router-dom Link
                     className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                     role="menuitem"
                   >
@@ -94,14 +142,14 @@ const Navbar = ({ toggleSidebar }) => {
                   </a>
                 </div>
                 <div className="py-1 border-t border-gray-200">
-                  <a
-                    href="#"
-                    className="flex items-center gap-3 px-4 py-2 text-sm text-red-600 hover:bg-red-50"
+                  <button
+                    onClick={handleLogout}
+                    className="flex items-center gap-3 px-4 py-2 text-sm text-red-600 hover:bg-red-50 w-full text-left"
                     role="menuitem"
                   >
                     <FaSignOutAlt className="h-5 w-5" />
                     <span>Sign out</span>
-                  </a>
+                  </button>
                 </div>
               </div>
             </Transition>
